@@ -1,0 +1,37 @@
+# Copyright VMware, Inc.
+# SPDX-License-Identifier: APACHE-2.0
+
+version: '2'
+
+services:
+  orders:
+    build: 
+      context: .
+      dockerfile: ./apps/orders/Dockerfile
+      target: development
+    command: yarn start:dev orders
+    env_file:
+      - ./apps/orders/.env
+    depends_on:
+      - mongodb
+    volumes:
+      - .:/usr/src/app 
+      - /usr/src/app/node_modules
+    ports:
+      - '3000:3000'
+
+  mongodb:
+    image: docker.io/bitnami/mongodb:7.0
+    environment:
+      - MONGODB_ADVERTISED_HOSTNAME=mongodb-primary
+      - MONGODB_REPLICA_SET_MODE=primary
+      - MONGODB_ROOT_PASSWORD=password123
+      - MONGODB_REPLICA_SET_KEY=replicasetkey123
+    ports:
+      - "27017:27017"
+    volumes:
+      - 'mongodb_data:/bitnami/mongodb'
+
+volumes:
+  mongodb_data:
+    driver: local
