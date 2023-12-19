@@ -18,7 +18,7 @@ import { Order, OrderSchema } from './schemas/order.schema';
       envFilePath: './apps/orders/.env',
     }),
     DatabaseModule,
-    MongooseModule.forFeature({ name: Order.name, schema: OrderSchema }),
+    MongooseModule.forFeature([{ name: Order.name, schema: OrderSchema }]),
   ],
   controllers: [OrdersController],
   providers: [OrdersService, OrderRepository],
